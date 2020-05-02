@@ -11,6 +11,11 @@
       crossorigin="anonymous"
     />
     <script
+      src="https://code.jquery.com/jquery-3.5.0.min.js"
+      integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
+      crossorigin="anonymous"
+    ></script>
+    <script
       src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
@@ -23,6 +28,8 @@
     />
   </head>
   <body style="background-color: bisque;">
+    <h1>Friend finder survey</h1>
+    <br />
     <form style="padding: 30px;" action="api/friends" method="POST">
       <h4>Question 1</h4>
       <h3>Do you like cats?</h3>
@@ -30,7 +37,7 @@
         <label for="exampleFormControlSelect1"
           >1= Not at all and 5= Absolutely!</label
         >
-        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+        <select class="custom-select mr-sm-2" id="q1">
           <option selected>Choose...</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -46,7 +53,7 @@
         <label for="exampleFormControlSelect1"
           >1= Not at all and 5= Absolutely!</label
         >
-        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+        <select class="custom-select mr-sm-2" id="q2">
           <option selected>Choose...</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -62,7 +69,7 @@
         <label for="exampleFormControlSelect1"
           >1= Not at all and 5= Absolutely!</label
         >
-        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+        <select class="custom-select mr-sm-2" id="q3">
           <option selected>Choose...</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -79,7 +86,7 @@
         <label for="exampleFormControlSelect1"
           >1= Not at all and 5= Absolutely!</label
         >
-        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+        <select class="custom-select mr-sm-2" id="q4">
           <option selected>Choose...</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -96,7 +103,7 @@
         <label for="exampleFormControlSelect1"
           >1= Not at all and 5= Absolutely!</label
         >
-        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+        <select class="custom-select mr-sm-2" id="q5">
           <option selected>Choose...</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -113,7 +120,7 @@
         <label for="exampleFormControlSelect1"
           >1= Not at all and 5= Absolutely!</label
         >
-        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+        <select class="custom-select mr-sm-2" id="q6">
           <option selected>Choose...</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -130,7 +137,7 @@
         <label for="exampleFormControlSelect1"
           >1= Not at all and 5= Absolutely!</label
         >
-        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+        <select class="custom-select mr-sm-2" id="q7">
           <option selected>Choose...</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -142,12 +149,12 @@
       <br />
 
       <h4>Question 8</h4>
-      <h3>Do you know how to skateboard?</h3>
+      <h3>Do you like lucha libre?</h3>
       <div class="form-group">
         <label for="exampleFormControlSelect1"
           >1= Not at all and 5= Absolutely!</label
         >
-        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+        <select class="custom-select mr-sm-2" id="q8">
           <option selected>Choose...</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -164,7 +171,7 @@
         <label for="exampleFormControlSelect1"
           >1= Not at all and 5= Absolutely!</label
         >
-        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+        <select class="custom-select mr-sm-2" id="q9">
           <option selected>Choose...</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -181,7 +188,7 @@
         <label for="exampleFormControlSelect1"
           >1= Not at all and 5= Absolutely!</label
         >
-        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+        <select class="custom-select mr-sm-2" id="q10">
           <option selected>Choose...</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -191,9 +198,50 @@
         </select>
       </div>
       <br />
-      <button type="submit" class="fa fa-users btn btn-secondary surveybtn">
+      <button type="submit" class="fa fa-users btn btn-secondary" id="submit">
         Find my new friend!
       </button>
     </form>
+    <script type="text/javascript">
+      $("#submit").on("click", function () {
+        function validateForm() {
+          var isValid = true;
+          $(".form-control").each(function () {
+            if ($(this).val() === "") isValid = false;
+          });
+          $(".custom-select").each(function () {
+            if ($(this).val() === "") isValid = false;
+          });
+          return isValid;
+        }
+        if (validateForm() === true) {
+          var userData = {
+            name: $("#name").val(),
+            photo: $("#photo").val(),
+            scores: [
+              $("q1").val(),
+              $("q2").val(),
+              $("q3").val(),
+              $("q4").val(),
+              $("q5").val(),
+              $("q6").val(),
+              $("q7").val(),
+              $("q8").val(),
+              $("q9").val(),
+              $("q10").val(),
+            ],
+          };
+          var currentURL = window.location.origin;
+          $.post(currentURL + "/api/friends", userData, function (data) {
+            $("#matchName").text(data.name);
+            $("#matchImg").attr("src", data.photo);
+            $("#resultsModal").modal("toggle");
+          });
+        } else {
+          alert("Please fill out all fields before submitting!");
+        }
+        return false;
+      });
+    </script>
   </body>
 </html>
